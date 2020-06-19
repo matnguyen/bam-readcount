@@ -9,6 +9,7 @@ struct aux_zm_t {
     int left_clip;
     int three_prime_index;
     int q2_pos;
+    int five_prime_index;
 
     std::string to_string() const {
         std::stringstream ss;
@@ -16,7 +17,8 @@ struct aux_zm_t {
             << " " << clipped_length
             << " " << left_clip
             << " " << three_prime_index
-            << " " << q2_pos;
+            << " " << q2_pos
+            << " " << five_prime_index;
         return ss.str();
     }
 
@@ -28,7 +30,8 @@ struct aux_zm_t {
             >> zm.clipped_length
             >> zm.left_clip
             >> zm.three_prime_index
-            >> zm.q2_pos;
+            >> zm.q2_pos
+            >> zm.five_prime_index;
 
         return zm;
     }

@@ -13,9 +13,10 @@ TEST(AuxFields, zm) {
     zm.left_clip = 3;
     zm.three_prime_index = 4;
     zm.q2_pos = 5;
+    zm.five_prime_index = 6;
 
     string s = zm.to_string();
-    ASSERT_EQ("1 2 3 4 5", s);
+    ASSERT_EQ("1 2 3 4 5 6", s);
 
     aux_zm_t zm2 = aux_zm_t::from_string(s.c_str());
 
@@ -24,6 +25,7 @@ TEST(AuxFields, zm) {
     ASSERT_EQ(3, zm.left_clip);
     ASSERT_EQ(4, zm.three_prime_index);
     ASSERT_EQ(5, zm.q2_pos);
+    ASSERT_EQ(6, zm.five_prime_index);
 }
 
 
@@ -34,9 +36,10 @@ TEST(AuxFields, zmNegative) {
     zm.left_clip = -3;
     zm.three_prime_index = -4;
     zm.q2_pos = -5;
+    zm.five_prime_index = -6;
 
     string s = zm.to_string();
-    ASSERT_EQ("-1 -2 -3 -4 -5", s);
+    ASSERT_EQ("-1 -2 -3 -4 -5 -6", s);
 
     aux_zm_t zm2 = aux_zm_t::from_string(s.c_str());
 
@@ -45,4 +48,5 @@ TEST(AuxFields, zmNegative) {
     ASSERT_EQ(-3, zm.left_clip);
     ASSERT_EQ(-4, zm.three_prime_index);
     ASSERT_EQ(-5, zm.q2_pos);
+    ASSERT_EQ(-6, zm.five_prime_index);
 }

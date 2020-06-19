@@ -20,6 +20,7 @@ BasicStat::BasicStat(bool is_indel)
     , sum_of_mismatch_qualities(0)
     , sum_of_clipped_lengths(0)
     , sum_3p_distance(0.0)
+    , sum_5p_distance(0.0)
     , sum_base_qualities(0)
     , is_indel(is_indel)
 {
@@ -42,6 +43,7 @@ void BasicStat::process_read(bam_pileup1_t const* base) {
     int32_t mismatch_sum = 0;
     int32_t q2_val = 0;
     int32_t three_prime_index = 0;
+    int32_t five_prime_index = 0;
 
     //hopefully grab out our calculated per/read values
     //FIXME these will be unavailable if there is no reference
@@ -54,6 +56,7 @@ void BasicStat::process_read(bam_pileup1_t const* base) {
         clipped_length = zm.clipped_length;
         left_clip = zm.left_clip;
         three_prime_index = zm.three_prime_index;
+        five_prime_index = zm.five_prime_index;
         q2_val = zm.q2_pos;
         sum_of_mismatch_qualities += mismatch_sum;
 
@@ -64,6 +67,9 @@ void BasicStat::process_read(bam_pileup1_t const* base) {
         }
         distances_to_3p.push_back( (float) std::abs(base->qpos - three_prime_index) / (float) base->b->core.l_qseq);
         sum_3p_distance += (float) std::abs(base->qpos - three_prime_index) / (float) base->b->core.l_qseq;
+
+        distances_to_5p.push_back( (float) std::abs(base->qpos - five_prime_index) / (float) base->b->core.l_qseq);
+        sum_5p_distance += (float) std::abs(base->qpos - five_prime_index) / (float) base->b->core.l_qseq;
 
         sum_of_clipped_lengths += clipped_length;
         float read_center = (float)clipped_length/2.0;
@@ -138,6 +144,7 @@ std::ostream& operator<<(std::ostream& s, const BasicStat& stat) {
         }
         s << (float) stat.sum_of_clipped_lengths / stat.read_count << ":";
         s << (float) stat.sum_3p_distance / stat.read_count;
+        s << (float) stat.sum_5p_distance / stat.read_count;
     }
     else {
         s << 0.0 << ":";
@@ -151,6 +158,7 @@ std::ostream& operator<<(std::ostream& s, const BasicStat& stat) {
         s << 0 << ":";
         s << 0.0 << ":";
         s << 0.0 << ":";
+        s << 0.0;
         s << 0.0;
     }
     s.flags(current_flags); //save previous format flags

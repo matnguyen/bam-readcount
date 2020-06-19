@@ -189,24 +189,37 @@ static int fetch_func(const bam1_t *b, void *data) {
 
     //inefficiently scan again to determine the distance in leftmost read coordinates to the first Q2 base
     int three_prime_index = -1;
+    int five_prime_index = -1;
     int q2_pos = -1;
+    int q2_pos_rev = -1;
     int k;
+    int j;
     int increment;
+    int j_increment;
     uint8_t *qual = bam1_qual(b);
     if(core->flag & BAM_FREVERSE) {
         k = three_prime_index = 0;
+        j = five_prime_index = core->l_qseq - 1;
         increment = 1;
+        j_increment = -1;
         if(three_prime_index < left_clip) {
             three_prime_index = left_clip;
+        }
+        if(five_prime_index > right_clip) {
+            five_prime_index = right_clip;
         }
     }
     else {
         k = three_prime_index = core->l_qseq - 1;
+        j = five_prime_index = 0;
         increment = -1;
+        j_increment = 1;
         if(three_prime_index > right_clip) {
             three_prime_index = right_clip;
         }
-
+        if(five_prime_index < left_clip) {
+            five_prime_index = left_clip;
+        }
     }
     while(q2_pos < 0 && k >= 0 && k < core->l_qseq) {
         if(qual[k] != 2) {
@@ -215,14 +228,27 @@ static int fetch_func(const bam1_t *b, void *data) {
         }
         k += increment;
     }
+    while(q2_pos_rev < 0 && j >= 0 && j < core->l_qseq) {
+        if(qual[j] != 2) {
+            q2_pos_rev = j-1;
+            break;
+        }
+        j += j_increment;
+    }
     if(core->flag & BAM_FREVERSE) {
         if(three_prime_index < q2_pos) {
             three_prime_index = q2_pos;
+        }
+        if(five_prime_index > q2_pos_rev && q2_pos_rev != -1) {
+            five_prime_index = q2_pos_rev;
         }
     }
     else {
         if(three_prime_index > q2_pos && q2_pos != -1) {
             three_prime_index = q2_pos;
+        }
+        if(five_prime_index < q2_pos_rev) {
+            five_prime_index = q2_pos_rev;
         }
     }
     uint8_t temp[5*4+1];
@@ -232,6 +258,7 @@ static int fetch_func(const bam1_t *b, void *data) {
     memcpy(temp+8, &left_clip,4);
     memcpy(temp+12, &three_prime_index,4);
     memcpy(temp+16, &q2_pos,4);
+    memcpy(temp+20, &five_prime_index,4);
 
     //store the value on the read, we're assuming it is always absent. This assumption may fail. Future proof if this idea has value
     aux_zm_t zm;
@@ -240,6 +267,7 @@ static int fetch_func(const bam1_t *b, void *data) {
     zm.left_clip = left_clip;
     zm.three_prime_index = three_prime_index;
     zm.q2_pos = q2_pos;
+    zm.five_prime_index = five_prime_index;
     std::string zm_str = zm.to_string();
     bam_aux_append((bam1_t *)b, "Zm", 'Z', zm_str.size() + 1, (uint8_t*)&zm_str[0]);
 
