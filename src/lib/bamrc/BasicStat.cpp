@@ -143,7 +143,7 @@ std::ostream& operator<<(std::ostream& s, const BasicStat& stat) {
             s << 0.0 << ":";
         }
         s << (float) stat.sum_of_clipped_lengths / stat.read_count << ":";
-        s << (float) stat.sum_3p_distance / stat.read_count;
+        s << (float) stat.sum_3p_distance / stat.read_count << ":";
         s << (float) stat.sum_5p_distance / stat.read_count;
     }
     else {
