@@ -29,6 +29,8 @@ include_directories(${Boost_INCLUDE_DIRS})
 include(BuildSamtools)
 include_directories(${Samtools_INCLUDE_DIRS})
 
+include_directories("/home/mnguyen/bin/zlib-1.2.11/include/")
+
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "GNU|Clang")
     set(CMAKE_CXX_FLAGS "-Wall -std=c++0x")
 endif ()
