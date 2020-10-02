@@ -1,0 +1,75 @@
+package:
+    name: bam-readcount
+    version: 1.0.0
+
+source:
+    fn: bam-readcount.1.0.0.tar.gz
+    url: https://github.com/matnguyen/bam-readcount/archive/v1.0.0.tar.gz
+    md5: c289fe7f5a393fbff5586991b6775175
+
+build:
+    number: 1
+
+requirements:
+    build:
+        - binutils_impl_linux-64 
+        - binutils_linux-64 
+        - bzip2
+        - ca-certificates 
+        - cmake 
+        - curl 
+        - expat 
+        - gcc_impl_linux-64 
+        - gcc_linux-64 
+        - krb5 
+        - libcurl 
+        - libedit 
+        - libgcc-ng 
+        - libssh2 
+        - libstdcxx-ng 
+        - libuv 
+        - ncurses 
+        - openssl 
+        - rhash 
+        - tk
+        - xz 
+        - zlib 
+    host:
+        - bzip2 
+        - ca-certificates 
+        - certifi 
+        - libffi 
+        - libgcc-ng 
+        - libstdcxx-ng 
+        - ncurses 
+        - openssl 
+        - perl 
+        - pip 
+        - python 
+        - readline 
+        - setuptools 
+        - sqlite 
+        - tk 
+        - wheel 
+        - xz 
+        - zlib 
+    run:
+        - libgcc-ng >=7.3.0
+        - ncurses >=6.1,<6.2.0a0
+        - perl >=5.26.2,<5.26.3.0a0
+        - python >=3.7,<3.8.0a0
+        - zlib >=1.2.11,<1.3.0a0
+        - zlib >=1.2.11,<1.3.0a0
+test:
+    commands:
+        - bam-readcount 2>&1 | grep bam-readcount > /dev/null
+
+about:
+    home: https://github.com/matnguyen/bam-readcount
+    license: MIT
+    summary: bam-readcount generates metrics at single nucleotide positions.
+
+extra:
+    copy_test_source_files: true
+    final: true
+
