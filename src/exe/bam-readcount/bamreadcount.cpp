@@ -251,8 +251,8 @@ static int fetch_func(const bam1_t *b, void *data) {
             five_prime_index = q2_pos_rev;
         }
     }
-    uint8_t temp[5*4+1];
-    temp[5*4]=0;
+    uint8_t temp[5*5+1];
+    temp[5*5]=0;
     memcpy(temp, &sum_of_mismatch_qualities,4);
     memcpy(temp+4, &clipped_length,4);
     memcpy(temp+8, &left_clip,4);
